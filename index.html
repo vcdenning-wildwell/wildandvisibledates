@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wild and Visible — Content Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple: #652781;
+    --purple-deep: #3d1650;
+    --purple-mid: #7a3295;
+    --purple-soft: #ead5f5;
+    --purple-pale: #f5eefa;
+    --green: #8ab53a;
+    --green-light: #c8daa0;
+    --green-dark: #6a8f2a;
+    --white: #FFFFFF;
+    --off-white: #faf8fc;
+    --cream: #f5f0fa;
+    --text-dark: #1a0d24;
+    --text-mid: #4a3858;
+    --text-light: #7a6888;
+    --rule: #ddd0ea;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--off-white);
+    color: var(--text-dark);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--purple-deep);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 40px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .brand-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--white);
+    letter-spacing: 0.02em;
+  }
+
+  .brand-name span { color: var(--green); font-style: italic; }
+
+  .brand-sub {
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+  }
+
+  .header-date {
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.1em;
+    font-weight: 300;
+  }
+
+  /* NAV */
+  .nav {
+    display: flex;
+    padding: 0 40px;
+  }
+
+  .nav-item {
+    padding: 14px 24px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+  }
+
+  .nav-item:hover { color: rgba(255,255,255,0.75); }
+  .nav-item.active { color: var(--green-light); border-bottom-color: var(--green); }
+
+  /* CONTENT */
+  .content {
+    padding: 48px 40px;
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* SECTION HEAD */
+  .section-head {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  .section-eyebrow {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--green);
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px;
+    font-weight: 300;
+    color: var(--purple-deep);
+    line-height: 1;
+  }
+
+  .section-intro {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--text-light);
+    line-height: 1.7;
+    max-width: 680px;
+    margin-bottom: 32px;
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+  }
+
+  /* FILTERS */
+  .filter-row {
+    display: flex;
+    gap: 0;
+    margin-bottom: 8px;
+    border: 1.5px solid var(--purple);
+    width: fit-content;
+    overflow: hidden;
+  }
+
+  .f-btn {
+    padding: 8px 18px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: transparent;
+    border: none;
+    border-right: 1px solid var(--purple-soft);
+    cursor: pointer;
+    color: var(--text-light);
+    transition: all 0.15s;
+    font-family: 'Jost', sans-serif;
+  }
+
+  .f-btn:last-child { border-right: none; }
+  .f-btn:hover { background: var(--purple-pale); color: var(--purple); }
+  .f-btn.active { background: var(--purple); color: var(--white); }
+
+  .month-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+    margin-top: 10px;
+  }
+
+  .m-btn {
+    padding: 5px 14px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid var(--rule);
+    cursor: pointer;
+    color: var(--text-light);
+    transition: all 0.15s;
+    font-family: 'Jost', sans-serif;
+  }
+
+  .m-btn:hover { border-color: var(--purple); color: var(--purple); }
+  .m-btn.active { background: var(--green); color: var(--white); border-color: var(--green); }
+
+  /* SEARCH */
+  .search-wrap {
+    position: relative;
+    margin-bottom: 16px;
+  }
+
+  .search-field {
+    padding: 11px 16px 11px 40px;
+    border: 1.5px solid var(--rule);
+    background: var(--white);
+    font-size: 14px;
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    color: var(--text-dark);
+    outline: none;
+    width: 100%;
+    max-width: 380px;
+    transition: border-color 0.2s ease;
+  }
+
+  .search-field:focus { border-color: var(--purple); }
+  .search-field::placeholder { color: var(--text-light); opacity: 0.6; }
+
+  .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-light);
+    font-size: 14px;
+    pointer-events: none;
+  }
+
+  /* DATES GRID */
+  .dates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 0;
+    border-top: 1.5px solid var(--purple);
+    border-left: 1.5px solid var(--purple);
+  }
+
+  .date-card {
+    border-right: 1.5px solid var(--purple);
+    border-bottom: 1.5px solid var(--purple);
+    padding: 24px;
+    background: var(--white);
+    transition: background 0.15s;
+  }
+
+  .date-card:hover { background: var(--purple-pale); }
+
+  .dc-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .dc-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--purple-deep);
+    line-height: 1.2;
+    flex: 1;
+    padding-right: 8px;
+  }
+
+  .dc-date {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--purple);
+    letter-spacing: 0.1em;
+    border: 1px solid var(--purple-soft);
+    padding: 3px 8px;
+    white-space: nowrap;
+    margin-top: 2px;
+    background: var(--purple-pale);
+  }
+
+  .dc-cat {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .cat-women { color: var(--purple); }
+  .cat-business { color: var(--green-dark); }
+  .cat-culture { color: #7a5c2e; }
+  .cat-health { color: #2a7a5c; }
+  .cat-seasonal { color: var(--text-light); }
+
+  .dc-hook {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--text-mid);
+    line-height: 1.6;
+    margin-bottom: 14px;
+    padding-left: 12px;
+    border-left: 3px solid var(--green);
+  }
+
+  .dc-angles {
+    border-top: 1px solid var(--rule);
+    padding-top: 12px;
+  }
+
+  .angles-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 8px;
+  }
+
+  .angle-item {
+    font-size: 12px;
+    color: var(--text-mid);
+    padding: 4px 0 4px 16px;
+    position: relative;
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  .angle-item::before {
+    content: '✦';
+    position: absolute;
+    left: 0;
+    color: var(--green);
+    font-size: 8px;
+    top: 6px;
+  }
+
+  .no-results {
+    padding: 48px;
+    text-align: center;
+    color: var(--text-light);
+    font-style: italic;
+    border: 1.5px dashed var(--rule);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+  }
+
+  /* CALENDAR */
+  .cal-wrap {
+    border: 1.5px solid var(--purple);
+    overflow: hidden;
+  }
+
+  .cal-nav {
+    display: flex;
+    align-items: center;
+    background: var(--purple-deep);
+    border-bottom: 1.5px solid var(--purple);
+  }
+
+  .cal-nav-btn {
+    padding: 14px 20px;
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.5);
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  .cal-nav-btn:hover { background: var(--purple); color: var(--white); }
+
+  .cal-title {
+    flex: 1;
+    text-align: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--white);
+    letter-spacing: 0.05em;
+  }
+
+  .cal-head {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: var(--purple);
+  }
+
+  .cal-hd {
+    text-align: center;
+    padding: 10px 4px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--green-light);
+  }
+
+  .cal-body {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+
+  .cal-cell {
+    min-height: 90px;
+    padding: 8px;
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    background: var(--white);
+  }
+
+  .cal-cell.empty { background: var(--off-white); }
+  .cal-cell.today { background: #f5f0fa; }
+  .cal-cell.has-ev { border-top: 3px solid var(--green); }
+  .cal-cell:nth-child(7n) { border-right: none; }
+
+  .cal-day { font-size: 13px; font-weight: 400; margin-bottom: 4px; color: var(--text-mid); }
+  .cal-cell.today .cal-day { color: var(--purple); font-weight: 600; }
+
+  .cal-ev {
+    display: block;
+    font-size: 9px;
+    padding: 2px 5px;
+    margin: 2px 0;
+    letter-spacing: 0.03em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 400;
+  }
+
+  .ev-women { background: rgba(101,39,129,0.1); color: var(--purple); }
+  .ev-business { background: rgba(138,181,58,0.12); color: var(--green-dark); }
+  .ev-health { background: rgba(42,122,92,0.1); color: #2a7a5c; }
+  .ev-seasonal { background: var(--cream); color: var(--text-light); border: 1px solid var(--rule); }
+  .ev-culture { background: rgba(122,92,46,0.08); color: #7a5c2e; }
+
+  /* TRENDING */
+  .trend-top {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+
+  .fetch-btn {
+    padding: 12px 28px;
+    background: var(--purple);
+    color: var(--white);
+    border: none;
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .fetch-btn:hover { background: var(--purple-deep); }
+  .fetch-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .fetch-time {
+    font-size: 12px;
+    color: var(--text-light);
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  .trend-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-top: 1.5px solid var(--purple);
+    border-left: 1.5px solid var(--purple);
+  }
+
+  .trend-card {
+    border-right: 1.5px solid var(--purple);
+    border-bottom: 1.5px solid var(--purple);
+    padding: 28px;
+    background: var(--white);
+    transition: background 0.15s;
+  }
+
+  .trend-card:hover { background: var(--purple-pale); }
+  .trend-card.hot { background: #fdf8ec; border-top: 3px solid var(--green); }
+  .trend-card.hot:hover { background: #f9f3dc; }
+
+  .t-urgency {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 8px;
+  }
+
+  .t-urgency.now { color: var(--green-dark); }
+
+  .t-topic {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--purple-deep);
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+
+  .t-angle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--text-mid);
+    padding: 12px 16px;
+    border-left: 3px solid var(--green);
+    background: var(--cream);
+    margin-bottom: 16px;
+  }
+
+  .hook-lbl {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 8px;
+  }
+
+  .hook-line {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-mid);
+    padding: 5px 0 5px 16px;
+    position: relative;
+    border-bottom: 1px solid var(--rule);
+    line-height: 1.5;
+  }
+
+  .hook-line:last-child { border-bottom: none; }
+
+  .hook-line::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--green);
+    font-size: 10px;
+    top: 6px;
+  }
+
+  .loading-box {
+    padding: 72px;
+    text-align: center;
+    color: var(--text-light);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+  }
+
+  .spinner {
+    width: 32px;
+    height: 32px;
+    border: 2px solid var(--rule);
+    border-top-color: var(--purple);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 20px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .empty-state {
+    padding: 64px;
+    text-align: center;
+    border: 1.5px dashed var(--rule);
+  }
+
+  .empty-state h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 300;
+    color: var(--purple-deep);
+    margin-bottom: 12px;
+  }
+
+  .empty-state p {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--text-light);
+    line-height: 1.7;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .trend-note {
+    margin-top: 24px;
+    font-size: 12px;
+    color: var(--text-light);
+    font-style: italic;
+    padding-top: 16px;
+    border-top: 1px solid var(--rule);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+  }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 80px;
+    padding: 32px 40px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--text-light);
+  }
+
+  .footer-brand span { color: var(--green); font-style: italic; }
+
+  .footer-note {
+    font-size: 11px;
+    color: var(--text-light);
+    font-weight: 300;
+    letter-spacing: 0.05em;
+  }
+
+  @media (max-width: 768px) {
+    .header-top { padding: 12px 20px; }
+    .nav { padding: 0 20px; }
+    .content { padding: 32px 20px; }
+    .trend-grid, .dates-grid { grid-template-columns: 1fr; }
+    .footer { flex-direction: column; gap: 8px; }
+    .brand-sub { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div class="brand">
+      <div class="brand-name">Wild and <span>Visible</span></div>
+      <div class="brand-sub">Content Intelligence</div>
+    </div>
+    <div class="header-date" id="headerDate"></div>
+  </div>
+  <div class="nav">
+    <div class="nav-item active" onclick="switchTab('dates')">Dates and Hooks</div>
+    <div class="nav-item" onclick="switchTab('calendar')">Calendar</div>
+    <div class="nav-item" onclick="switchTab('trending')">Live Trends</div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- DATES -->
+  <div id="panel-dates" class="panel active">
+    <div class="section-head">
+      <span class="section-eyebrow">Annual Intelligence</span>
+      <h2 class="section-title">Content Dates and Hooks</h2>
+    </div>
+    <p class="section-intro">Awareness days, cultural moments and seasonal anchors with angles shaped for women in business, visibility and entrepreneurship.</p>
+
+    <div class="search-wrap">
+      <span class="search-icon">⌕</span>
+      <input class="search-field" type="text" placeholder="Search dates or keywords..." oninput="filterDates(this.value)"/>
+    </div>
+
+    <div class="filter-row" id="catFilter">
+      <button class="f-btn active" onclick="setFilter('all',this)">All</button>
+      <button class="f-btn" onclick="setFilter('women',this)">Women</button>
+      <button class="f-btn" onclick="setFilter('business',this)">Business</button>
+      <button class="f-btn" onclick="setFilter('health',this)">Health</button>
+      <button class="f-btn" onclick="setFilter('culture',this)">Culture</button>
+      <button class="f-btn" onclick="setFilter('seasonal',this)">Seasonal</button>
+    </div>
+
+    <div class="month-row" id="mthFilter">
+      <button class="m-btn active" onclick="setMonth('all',this)">All</button>
+      <button class="m-btn" onclick="setMonth(0,this)">Jan</button>
+      <button class="m-btn" onclick="setMonth(1,this)">Feb</button>
+      <button class="m-btn" onclick="setMonth(2,this)">Mar</button>
+      <button class="m-btn" onclick="setMonth(3,this)">Apr</button>
+      <button class="m-btn" onclick="setMonth(4,this)">May</button>
+      <button class="m-btn" onclick="setMonth(5,this)">Jun</button>
+      <button class="m-btn" onclick="setMonth(6,this)">Jul</button>
+      <button class="m-btn" onclick="setMonth(7,this)">Aug</button>
+      <button class="m-btn" onclick="setMonth(8,this)">Sep</button>
+      <button class="m-btn" onclick="setMonth(9,this)">Oct</button>
+      <button class="m-btn" onclick="setMonth(10,this)">Nov</button>
+      <button class="m-btn" onclick="setMonth(11,this)">Dec</button>
+    </div>
+
+    <div class="dates-grid" id="datesGrid"></div>
+    <div class="no-results" id="noRes" style="display:none">No dates match. Try another filter or search term.</div>
+  </div>
+
+  <!-- CALENDAR -->
+  <div id="panel-calendar" class="panel">
+    <div class="section-head">
+      <span class="section-eyebrow">Planning View</span>
+      <h2 class="section-title">Monthly Calendar</h2>
+    </div>
+    <p class="section-intro">See awareness days and content moments plotted across the month so you can plan ahead with ease.</p>
+    <div class="cal-wrap">
+      <div class="cal-nav">
+        <button class="cal-nav-btn" onclick="prevM()">‹</button>
+        <div class="cal-title" id="calTitle"></div>
+        <button class="cal-nav-btn" onclick="nextM()">›</button>
+      </div>
+      <div class="cal-head">
+        <div class="cal-hd">Mon</div><div class="cal-hd">Tue</div><div class="cal-hd">Wed</div>
+        <div class="cal-hd">Thu</div><div class="cal-hd">Fri</div><div class="cal-hd">Sat</div><div class="cal-hd">Sun</div>
+      </div>
+      <div class="cal-body" id="calBody"></div>
+    </div>
+  </div>
+
+  <!-- TRENDING -->
+  <div id="panel-trending" class="panel">
+    <div class="section-head">
+      <span class="section-eyebrow">Live Intelligence</span>
+      <h2 class="section-title">What Is Trending Now</h2>
+    </div>
+    <p class="section-intro">Business, entrepreneurship, women in work, visibility and digital culture — filtered for what actually matters to your audience and shaped into content angles.</p>
+    <div class="trend-top">
+      <button class="fetch-btn" onclick="fetchTrends()" id="fetchBtn">↻  Fetch Live Trends</button>
+      <span class="fetch-time" id="fetchTime"></span>
+    </div>
+    <div id="trendOut">
+      <div class="empty-state">
+        <h3>Ready to scan</h3>
+        <p>Press Fetch Live Trends to pull the current cultural and business conversation, filtered for women entrepreneurs, visibility, digital business and personal brand topics.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-brand">Wild and <span>Visible</span> · WildWell Wellbeing</div>
+  <div class="footer-note">Content Intelligence · Members only</div>
+</div>
+
+<script>
+const DATES = [
+  {m:0,d:1,name:"New Year's Day",cat:"culture",hook:"Everyone is posting about fresh starts. You can be the one who asks: what if you did not need to change, just stop hiding?",angles:["Visibility as a January intention","Setting a content strategy for the year","The performance of transformation vs actual growth"]},
+  {m:0,d:14,name:"National Entrepreneurship Day",cat:"business",hook:"Most women started their business to be free. The irony is they work harder than ever. That is the conversation worth having.",angles:["Freedom vs hustle in business","What working for yourself actually costs","The invisible ceiling in women's entrepreneurship"]},
+  {m:0,d:28,name:"Data Privacy Day",cat:"business",hook:"Your audience is warier than ever about where they share themselves online. Visibility starts with trust.",angles:["Building audience trust in a sceptical era","What ethical marketing actually looks like","Why connection beats reach"]},
+  {m:1,d:5,name:"Safer Internet Day",cat:"culture",hook:"The online world is noisier and more hostile than ever, especially for women who put themselves out there. That fear is real and worth naming.",angles:["The emotional cost of visibility for women","How to be seen without overexposing yourself","Online safety and the choice to show up"]},
+  {m:1,d:14,name:"Valentine's Day",cat:"culture",hook:"The relationship between a business owner and her audience is one of the most underrated relationships in her life.",angles:["Audience as community not numbers","What your content says about what you value","Love languages in business communication"]},
+  {m:1,d:22,name:"World Thinking Day",cat:"culture",hook:"The best content does not shout. It makes people stop and think. That is a skill worth cultivating.",angles:["Depth over volume in content strategy","Standing out by going deeper","The thought leader who earns attention"]},
+  {m:2,d:8,name:"International Women's Day",cat:"women",hook:"The loudest voices on IWD are often brands. The most powerful content will be personal and true.",angles:["IWD done differently — no platitudes","Stories that actually move people","Visibility as an act of solidarity"]},
+  {m:2,d:15,name:"World Consumer Rights Day",cat:"business",hook:"The modern buyer is exhausted by being sold to. They want to be seen and served, not targeted.",angles:["Ethical selling in the creator economy","Building a business people trust","What your buyers actually want from you"]},
+  {m:2,d:20,name:"Spring Equinox",cat:"seasonal",hook:"Q1 is almost over. What did you say yes to that you should have said no to? What stayed quiet that deserved a platform?",angles:["Q1 content audit and learning","Seasonal content strategy reset","Spring as a natural restart for visibility"]},
+  {m:2,d:26,name:"Purple Day — Epilepsy Awareness",cat:"health",hook:"Invisible conditions, invisible struggles. The women in your audience are often carrying more than anyone can see.",angles:["Hidden health challenges and entrepreneurship","Creating space for imperfection in business","The cost of presenting a curated self"]},
+  {m:3,d:1,name:"April Fool's Day",cat:"culture",hook:"The greatest trick the internet ever played on creators: making them think they need to go viral to matter.",angles:["Rejecting vanity metrics","Depth of connection vs breadth of reach","The myth of overnight success"]},
+  {m:3,d:23,name:"World Book Day — UNESCO",cat:"culture",hook:"Every book that changed your life started with someone deciding their ideas were worth writing down. So are yours.",angles:["Thought leadership and original thinking","Content as intellectual legacy","The authority that comes from sharing your actual perspective"]},
+  {m:3,d:25,name:"World DNA Day",cat:"culture",hook:"Your background, your history, your story. These are not liabilities. They are the source of your most original content.",angles:["Personal story as brand differentiator","Authenticity beyond aesthetic","What makes your voice genuinely unrepeatable"]},
+  {m:4,d:1,name:"International Workers' Day",cat:"business",hook:"The creator economy promised liberation from the 9 to 5. For many women it delivered a 24/7 instead. That is a conversation worth opening.",angles:["Boundaries in a be everywhere culture","Working less and earning more — what is real","The self-employed woman who forgot to rest"]},
+  {m:4,d:3,name:"World Press Freedom Day",cat:"culture",hook:"The right to say what you actually think is more contested than we would like to believe, even in the wellness and coaching space.",angles:["Courage to share unpopular perspectives","Standing for something in a polarised world","The cost and value of speaking your actual mind"]},
+  {m:4,d:16,name:"Mental Health Awareness Week",cat:"health",hook:"Entrepreneurship and mental health have a relationship we barely talk about honestly. The highs are real. So are the lows.",angles:["Mental health and business ownership","What the passion economy does not tell you","Normalising struggle as part of the creative process"]},
+  {m:5,d:1,name:"Global Day of Parents",cat:"culture",hook:"Many women built businesses around their children. Some built them despite their children. Both stories deserve telling.",angles:["Parenting and entrepreneurship — the real story","Business and identity beyond the role of mother","Who you are when the kids are grown"]},
+  {m:5,d:5,name:"World Environment Day",cat:"seasonal",hook:"Sustainable business is not just environmental. It is about building something that does not burn you out.",angles:["Sustainable business models for women","Long game vs launch culture","What you want your business to look like in five years"]},
+  {m:5,d:21,name:"Summer Solstice",cat:"seasonal",hook:"The longest day of the year. What are you amplifying? What has been playing in the background that deserves to be heard?",angles:["Mid-year visibility audit","What content deserves more reach","Seasonal momentum and strategy reset"]},
+  {m:5,d:28,name:"Pride Month",cat:"culture",hook:"Visibility for its own sake is not enough. Visibility in service of something true, that is what lasts.",angles:["What visibility means beyond performance","Showing up for the right reasons","Inclusive marketing that is not performative"]},
+  {m:6,d:10,name:"World Population Day",cat:"culture",hook:"You do not need everyone to hear you. You need the right people to hear you deeply. That is a completely different goal.",angles:["Niche depth vs mass reach","Building an audience of true believers","Quality over quantity in list and following growth"]},
+  {m:6,d:30,name:"International Day of Friendship",cat:"culture",hook:"The most sustainable marketing is community, not algorithm. The women who grow quietly, grow together.",angles:["Community as business strategy","Collaboration over competition","Building relationships not just reach"]},
+  {m:7,d:9,name:"National Book Lovers Day",cat:"culture",hook:"The people in your audience who read deeply are also the ones who buy thoughtfully. Depth attracts depth.",angles:["Writing long-form content that earns trust","The business case for intellectual generosity","Content that ages well vs content that trends"]},
+  {m:7,d:19,name:"World Photography Day",cat:"culture",hook:"Visual identity is how people recognise you before they have read a word. What does yours say?",angles:["Visual content strategy for women in business","Personal brand photography — worth it or not","How imagery signals your positioning"]},
+  {m:8,d:1,name:"Back to Business",cat:"seasonal",hook:"September is the real January for women in business. The planning season. The season where decisions get made.",angles:["Q4 content and launch planning","September as a strategic reset","What you want to achieve before December"]},
+  {m:8,d:5,name:"International Day of Charity",cat:"culture",hook:"The most generous thing a businesswoman can do is share what she actually knows, not just what works in theory.",angles:["Generosity as content strategy","What free content is really for","The difference between giving and overgiving"]},
+  {m:9,d:11,name:"International Day of the Girl",cat:"women",hook:"What do you wish someone had told you? That is content. That is legacy. That is visibility in service of something real.",angles:["Mentorship and knowledge sharing","What you know now that you wish you had known","Creating content that serves future women"]},
+  {m:9,d:15,name:"Global Handwashing Day",cat:"culture",hook:"Small habits, compounded. Your content strategy is no different. Show up small and consistently and watch what builds.",angles:["Content consistency over content perfection","The compounding effect of showing up","Small visible actions vs occasional viral efforts"]},
+  {m:9,d:19,name:"Women's Entrepreneurship Day",cat:"women",hook:"The data on women in business is still not great. That is not motivation to stop. It is fuel to be more visible, not less.",angles:["Statistics on women entrepreneurs with a reframe","Visibility as resistance and contribution","The power of women building wealth on their own terms"]},
+  {m:10,d:11,name:"Remembrance Day",cat:"culture",hook:"Before you chase the next trend, what was worth keeping from what you built this year? Not everything needs to be new.",angles:["Content audit and legacy thinking","Celebrating what you have actually built","The value of depth over perpetual novelty"]},
+  {m:10,d:25,name:"Day for the Elimination of Violence Against Women",cat:"women",hook:"Safety to show up, online and in life, is not a given for all women. Visibility requires that we name what gets in the way.",angles:["The barriers to visibility that are not about strategy","Creating safer spaces online","Advocacy and visibility as intertwined"]},
+  {m:11,d:5,name:"Year End Reflection",cat:"seasonal",hook:"The soil is what everything grows from. Your audience, your list, your reputation. What are you cultivating for next year?",angles:["Year end audience audit","What to invest in for the year ahead","Content and community as long-term asset"]},
+  {m:11,d:31,name:"New Year's Eve",cat:"seasonal",hook:"Before you set goals, ask yourself what you actually want visibility for. The why has to come before the strategy.",angles:["Purpose-led content planning","Intention-setting for the year in business","What success looks like beyond numbers"]},
+];
+
+let aF='all', aM='all', sQ='';
+let cM=new Date().getMonth(), cY=new Date().getFullYear();
+const MNS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const CAT_LABELS={women:"Women",business:"Business",health:"Health",culture:"Culture",seasonal:"Seasonal"};
+const CAT_CLASS={women:"cat-women",business:"cat-business",health:"cat-health",culture:"cat-culture",seasonal:"cat-seasonal"};
+const EV_CLASS={women:"ev-women",business:"ev-business",health:"ev-health",culture:"ev-culture",seasonal:"ev-seasonal"};
+
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('headerDate').textContent = new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  renderDates();
+  renderCal();
+});
+
+function switchTab(t){
+  ['dates','calendar','trending'].forEach((x,i)=>{
+    document.querySelectorAll('.nav-item')[i].classList.toggle('active',x===t);
+  });
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+t).classList.add('active');
+}
+
+function setFilter(c,btn){aF=c;document.querySelectorAll('#catFilter .f-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderDates();}
+function setMonth(m,btn){aM=m;document.querySelectorAll('#mthFilter .m-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderDates();}
+function filterDates(q){sQ=q.toLowerCase();renderDates();}
+
+function getFilt(){
+  return DATES.filter(d=>{
+    const cO=aF==='all'||d.cat===aF;
+    const mO=aM==='all'||d.m===aM;
+    const sO=!sQ||d.name.toLowerCase().includes(sQ)||d.hook.toLowerCase().includes(sQ)||d.angles.some(a=>a.toLowerCase().includes(sQ));
+    return cO&&mO&&sO;
+  }).sort((a,b)=>a.m-b.m||a.d-b.d);
+}
+
+function renderDates(){
+  const f=getFilt();
+  document.getElementById('noRes').style.display=f.length?'none':'block';
+  document.getElementById('datesGrid').innerHTML=f.map(d=>`
+    <div class="date-card">
+      <div class="dc-top">
+        <div class="dc-name">${d.name}</div>
+        <div class="dc-date">${MNS[d.m].slice(0,3).toUpperCase()} ${d.d}</div>
+      </div>
+      <div class="dc-cat ${CAT_CLASS[d.cat]}">${CAT_LABELS[d.cat]||d.cat}</div>
+      <div class="dc-hook">${d.hook}</div>
+      <div class="dc-angles">
+        <div class="angles-label">Content angles</div>
+        ${d.angles.map(a=>`<div class="angle-item">${a}</div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function renderCal(){
+  document.getElementById('calTitle').textContent=`${MNS[cM]} ${cY}`;
+  const today=new Date();
+  const fd=new Date(cY,cM,1).getDay(), fm=fd===0?6:fd-1;
+  const dim=new Date(cY,cM+1,0).getDate();
+  let html='';
+  for(let i=0;i<fm;i++) html+=`<div class="cal-cell empty"></div>`;
+  for(let d=1;d<=dim;d++){
+    const evs=DATES.filter(x=>x.m===cM&&x.d===d);
+    const isT=cY===today.getFullYear()&&cM===today.getMonth()&&d===today.getDate();
+    html+=`<div class="cal-cell${isT?' today':''}${evs.length?' has-ev':''}">
+      <div class="cal-day">${d}</div>
+      ${evs.map(e=>`<span class="cal-ev ${EV_CLASS[e.cat]}">${e.name}</span>`).join('')}
+    </div>`;
+  }
+  document.getElementById('calBody').innerHTML=html;
+}
+
+function prevM(){cM--;if(cM<0){cM=11;cY--;}renderCal();}
+function nextM(){cM++;if(cM>11){cM=0;cY++;}renderCal();}
+
+const TREND_SYSTEM=`You are a content strategist for Wild and Visible, a community for women in business who want to show up consistently online and grow their visibility. The audience is diverse — product businesses, service businesses, coaches, therapists, bakers, creatives, consultants, and everything in between. Women in business, 30s to 50s, building personal brands and businesses they love. They care about visibility, showing up authentically online, building trust with their audience, growing their business without burnout, and making social media feel easier and more natural.
+
+After searching, return ONLY valid JSON with no fences or preamble:
+{"trends":[{"topic":"string","category":"business|women|visibility|culture|digital","urgency":"now|watchlist|evergreen","biz_angle":"1-2 sentences connecting this trend to showing up online, building visibility, or growing a business — written to be useful for ANY type of business, from a baker to a coach to a therapist","hooks":["hook1","hook2","hook3"]}]}
+Return exactly 6 trends. Make every angle and hook broad enough for product and service businesses alike. Avoid niche-specific advice.`;
+
+async function fetchTrends(){
+  const btn=document.getElementById('fetchBtn');
+  const out=document.getElementById('trendOut');
+  btn.disabled=true; btn.textContent='Searching...';
+  out.innerHTML=`<div class="loading-box"><div class="spinner"></div><div>Scanning what is happening in business, women's work and digital culture...</div></div>`;
+  try{
+    const userMsg="Search for current trending news and conversations relevant to: women in business, small business owners, social media for business, visibility and personal branding, content creation trends 2026, women entrepreneurs, digital marketing, building an audience online, showing up on social media, business growth for women, female founders, product businesses and service businesses run by women. Find what is actually being discussed now in 2026. Return your JSON analysis with hooks and angles that work for any type of business.";
+    const r=await fetch('/.netlify/functions/trends',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:TREND_SYSTEM,userMsg:userMsg})});
+    if(!r.ok) throw new Error(`Function error ${r.status}`);
+    const parsed=await r.json();
+    if(parsed.error) throw new Error(parsed.error);
+    renderTrends(parsed);
+    document.getElementById('fetchTime').textContent=`Updated at ${new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}`;
+  }catch(err){
+    out.innerHTML=`<div class="empty-state"><h3>Could not fetch</h3><p>${err.message}</p></div>`;
+  }
+  btn.disabled=false; btn.textContent='↻  Fetch Live Trends';
+}
+
+function renderTrends(data){
+  const uL={now:'Trending Now',watchlist:'Watch This',evergreen:'Evergreen'};
+  document.getElementById('trendOut').innerHTML=`
+    <div class="trend-grid">
+      ${data.trends.map(t=>`
+        <div class="trend-card${t.urgency==='now'?' hot':''}">
+          <div class="t-urgency ${t.urgency==='now'?'now':''}">${uL[t.urgency]||t.urgency} · ${t.category}</div>
+          <div class="t-topic">${t.topic}</div>
+          <div class="t-angle">${t.biz_angle}</div>
+          <div class="hook-lbl">Content hooks</div>
+          ${t.hooks.map(h=>`<div class="hook-line">${h}</div>`).join('')}
+        </div>`).join('')}
+    </div>
+    <div class="trend-note">Generated from live web search. Filter through your own voice and experience before posting.</div>`;
+}
+</script>
+</body>
+</html>
