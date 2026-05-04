@@ -32,7 +32,7 @@ exports.handler = async function(event, context) {
         system: systemPrompt,
         messages: [{
           role: 'user',
-          content: 'Generate 6 current trending topics relevant to women in business and visibility in May 2026. Return only the JSON as specified.'
+          content: `Generate 6 trending content topics for May 2026 relevant to women who run small businesses of any kind — including hairdressers, bakers, cake makers, hypnotherapists, coaches, holistic therapists, makers, crafters, virtual assistants, cleaners, childminders, fitness instructors, beauticians, artists, photographers, florists, and any other type of small business run by a woman. Topics should be about real everyday things these women deal with: showing up online, pricing, dealing with difficult customers, juggling family and business, confidence, getting seen, managing money, burnout, social media, word of mouth, building a loyal customer base, and growing without losing themselves. Make every topic feel grounded and real, not corporate. Return only the JSON as specified.`
         }]
       })
     });
