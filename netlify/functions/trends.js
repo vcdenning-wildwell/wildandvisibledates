@@ -12,7 +12,6 @@ exports.handler = async function(event, context) {
 
   const body = JSON.parse(event.body || '{}');
   const systemPrompt = body.system;
-  const userMsg = body.userMsg;
   const apiKey = process.env.ANTHROPIC_API_KEY;
 
   if (!apiKey) {
@@ -20,59 +19,26 @@ exports.handler = async function(event, context) {
   }
 
   try {
-    // First call with web search tool
-    const response1 = await fetch('https://api.anthropic.com/v1/messages', {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-beta': 'web-search-2025-03-05'
+        'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 2000,
+        max_tokens: 1500,
         system: systemPrompt,
-        messages: [{ role: 'user', content: userMsg }],
-        tools: [{ type: 'web_search_20250305', name: 'web_search' }]
+        messages: [{
+          role: 'user',
+          content: 'Generate 6 current trending topics relevant to women in business and visibility in May 2026. Return only the JSON as specified.'
+        }]
       })
     });
 
-    const data1 = await response1.json();
-    const msgs = [
-      { role: 'user', content: userMsg },
-      { role: 'assistant', content: data1.content }
-    ];
-
-    let finalData = data1;
-
-    if (data1.stop_reason === 'tool_use') {
-      const toolResults = data1.content
-        .filter(b => b.type === 'tool_use')
-        .map(b => ({ type: 'tool_result', tool_use_id: b.id, content: b.output || 'Search results received' }));
-
-      msgs.push({ role: 'user', content: toolResults });
-
-      const response2 = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
-          'anthropic-beta': 'web-search-2025-03-05'
-        },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 2000,
-          system: systemPrompt,
-          messages: msgs
-        })
-      });
-
-      finalData = await response2.json();
-    }
-
-    const raw = finalData.content
+    const data = await response.json();
+    const raw = data.content
       .filter(b => b.type === 'text')
       .map(b => b.text)
       .join('')
@@ -81,10 +47,9 @@ exports.handler = async function(event, context) {
 
     const start = raw.indexOf('{');
     const end = raw.lastIndexOf('}');
-    if (start === -1) throw new Error('No JSON found in response');
+    if (start === -1) throw new Error('No JSON found');
 
     const parsed = JSON.parse(raw.slice(start, end + 1));
-
     return { statusCode: 200, headers, body: JSON.stringify(parsed) };
 
   } catch (err) {
