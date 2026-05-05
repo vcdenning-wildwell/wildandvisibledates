@@ -1,5 +1,3 @@
 [functions]
   timeout = 30
 [[scheduled-functions]]
-  name = "refresh"
-  cron = "0 6 * * *"
