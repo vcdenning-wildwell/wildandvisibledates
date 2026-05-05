@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,7 +34,6 @@
     min-height: 100vh;
   }
 
-  /* HEADER */
   .header {
     background: var(--purple-deep);
     position: sticky;
@@ -49,11 +49,7 @@
     border-bottom: 1px solid rgba(255,255,255,0.07);
   }
 
-  .brand {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-  }
+  .brand { display: flex; align-items: baseline; gap: 12px; }
 
   .brand-name {
     font-family: 'Cormorant Garamond', serif;
@@ -80,11 +76,7 @@
     font-weight: 300;
   }
 
-  /* NAV */
-  .nav {
-    display: flex;
-    padding: 0 40px;
-  }
+  .nav { display: flex; padding: 0 40px; }
 
   .nav-item {
     padding: 14px 24px;
@@ -101,7 +93,6 @@
   .nav-item:hover { color: rgba(255,255,255,0.75); }
   .nav-item.active { color: var(--green-light); border-bottom-color: var(--green); }
 
-  /* CONTENT */
   .content {
     padding: 48px 40px;
     max-width: 1320px;
@@ -111,7 +102,6 @@
   .panel { display: none; }
   .panel.active { display: block; }
 
-  /* SECTION HEAD */
   .section-head {
     margin-bottom: 8px;
     display: flex;
@@ -147,7 +137,6 @@
     font-size: 17px;
   }
 
-  /* FILTERS */
   .filter-row {
     display: flex;
     gap: 0;
@@ -201,11 +190,7 @@
   .m-btn:hover { border-color: var(--purple); color: var(--purple); }
   .m-btn.active { background: var(--green); color: var(--white); border-color: var(--green); }
 
-  /* SEARCH */
-  .search-wrap {
-    position: relative;
-    margin-bottom: 16px;
-  }
+  .search-wrap { position: relative; margin-bottom: 16px; }
 
   .search-field {
     padding: 11px 16px 11px 40px;
@@ -234,7 +219,6 @@
     pointer-events: none;
   }
 
-  /* DATES GRID */
   .dates-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -307,10 +291,7 @@
     border-left: 3px solid var(--green);
   }
 
-  .dc-angles {
-    border-top: 1px solid var(--rule);
-    padding-top: 12px;
-  }
+  .dc-angles { border-top: 1px solid var(--rule); padding-top: 12px; }
 
   .angles-label {
     font-size: 9px;
@@ -349,11 +330,7 @@
     font-size: 18px;
   }
 
-  /* CALENDAR */
-  .cal-wrap {
-    border: 1.5px solid var(--purple);
-    overflow: hidden;
-  }
+  .cal-wrap { border: 1.5px solid var(--purple); overflow: hidden; }
 
   .cal-nav {
     display: flex;
@@ -385,11 +362,7 @@
     letter-spacing: 0.05em;
   }
 
-  .cal-head {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    background: var(--purple);
-  }
+  .cal-head { display: grid; grid-template-columns: repeat(7, 1fr); background: var(--purple); }
 
   .cal-hd {
     text-align: center;
@@ -401,10 +374,7 @@
     color: var(--green-light);
   }
 
-  .cal-body {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-  }
+  .cal-body { display: grid; grid-template-columns: repeat(7, 1fr); }
 
   .cal-cell {
     min-height: 90px;
@@ -449,29 +419,30 @@
     flex-wrap: wrap;
   }
 
-  .fetch-btn {
-    padding: 12px 28px;
-    background: var(--purple);
-    color: var(--white);
-    border: none;
+  .refresh-btn {
+    padding: 10px 22px;
+    background: transparent;
+    color: var(--purple);
+    border: 1.5px solid var(--purple);
     font-family: 'Jost', sans-serif;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 500;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     cursor: pointer;
-    transition: background 0.2s ease;
+    transition: all 0.2s ease;
   }
 
-  .fetch-btn:hover { background: var(--purple-deep); }
-  .fetch-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .refresh-btn:hover { background: var(--purple); color: var(--white); }
 
-  .fetch-time {
-    font-size: 12px;
+  .refresh-status {
+    font-size: 13px;
     color: var(--text-light);
     font-style: italic;
     font-family: 'Cormorant Garamond', serif;
   }
+
+  .refresh-status.fresh { color: var(--green-dark); }
 
   .trend-grid {
     display: grid;
@@ -611,7 +582,6 @@
     font-size: 14px;
   }
 
-  /* FOOTER */
   .footer {
     margin-top: 80px;
     padding: 32px 40px;
@@ -629,13 +599,7 @@
   }
 
   .footer-brand span { color: var(--green); font-style: italic; }
-
-  .footer-note {
-    font-size: 11px;
-    color: var(--text-light);
-    font-weight: 300;
-    letter-spacing: 0.05em;
-  }
+  .footer-note { font-size: 11px; color: var(--text-light); font-weight: 300; letter-spacing: 0.05em; }
 
   @media (max-width: 768px) {
     .header-top { padding: 12px 20px; }
@@ -649,7 +613,6 @@
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="header">
   <div class="header-top">
     <div class="brand">
@@ -665,7 +628,6 @@
   </div>
 </div>
 
-<!-- CONTENT -->
 <div class="content">
 
   <!-- DATES -->
@@ -737,22 +699,18 @@
       <span class="section-eyebrow">Live Intelligence</span>
       <h2 class="section-title">What Is Trending Now</h2>
     </div>
-    <p class="section-intro">Business, entrepreneurship, women in work, visibility and digital culture — filtered for what actually matters to your audience and shaped into content angles.</p>
+    <p class="section-intro">Refreshed every morning at 6am. Real trends, shaped into content angles for women in small business.</p>
     <div class="trend-top">
-      <button class="fetch-btn" onclick="fetchTrends()" id="fetchBtn">↻  Fetch Live Trends</button>
-      <span class="fetch-time" id="fetchTime"></span>
+      <button class="refresh-btn" onclick="loadTrends()">↻ Reload</button>
+      <span class="refresh-status" id="refreshStatus">Loading...</span>
     </div>
     <div id="trendOut">
-      <div class="empty-state">
-        <h3>Ready to scan</h3>
-        <p>Press Fetch Live Trends to pull the current cultural and business conversation, filtered for women entrepreneurs, visibility, digital business and personal brand topics.</p>
-      </div>
+      <div class="loading-box"><div class="spinner"></div><div>Loading today's trends...</div></div>
     </div>
   </div>
 
 </div>
 
-<!-- FOOTER -->
 <div class="footer">
   <div class="footer-brand">Wild and <span>Visible</span> · WildWell Wellbeing</div>
   <div class="footer-note">Content Intelligence · Members only</div>
@@ -806,6 +764,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('headerDate').textContent = new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   renderDates();
   renderCal();
+  loadTrends();
 });
 
 function switchTab(t){
@@ -868,29 +827,41 @@ function renderCal(){
 function prevM(){cM--;if(cM<0){cM=11;cY--;}renderCal();}
 function nextM(){cM++;if(cM>11){cM=0;cY++;}renderCal();}
 
-const TREND_SYSTEM=`You are a content strategist for Wild and Visible, a community for women in business who want to show up consistently online and grow their visibility. The audience is diverse — product businesses, service businesses, coaches, therapists, bakers, creatives, consultants, and everything in between. Women in business, 30s to 50s, building personal brands and businesses they love. They care about visibility, showing up authentically online, building trust with their audience, growing their business without burnout, and making social media feel easier and more natural.
-
-After searching, return ONLY valid JSON with no fences or preamble:
-{"trends":[{"topic":"string","category":"business|women|visibility|culture|digital","urgency":"now|watchlist|evergreen","biz_angle":"1-2 sentences connecting this trend to showing up online, building visibility, or growing a business — written to be useful for ANY type of business, from a baker to a coach to a therapist","hooks":["hook1","hook2","hook3"]}]}
-Return exactly 6 trends. Make every angle and hook broad enough for product and service businesses alike. Avoid niche-specific advice.`;
-
-async function fetchTrends(){
-  const btn=document.getElementById('fetchBtn');
+async function loadTrends(){
   const out=document.getElementById('trendOut');
-  btn.disabled=true; btn.textContent='Searching...';
-  out.innerHTML=`<div class="loading-box"><div class="spinner"></div><div>Scanning what is happening in business, women's work and digital culture...</div></div>`;
+  const status=document.getElementById('refreshStatus');
+  status.textContent='Loading...';
+  status.className='refresh-status';
+  out.innerHTML=`<div class="loading-box"><div class="spinner"></div><div>Loading today's trends...</div></div>`;
+
   try{
-    const userMsg="Search for current trending news and conversations relevant to: women in business, small business owners, social media for business, visibility and personal branding, content creation trends 2026, women entrepreneurs, digital marketing, building an audience online, showing up on social media, business growth for women, female founders, product businesses and service businesses run by women. Find what is actually being discussed now in 2026. Return your JSON analysis with hooks and angles that work for any type of business.";
-    const r=await fetch('/.netlify/functions/trends',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:TREND_SYSTEM,userMsg:userMsg})});
-    if(!r.ok) throw new Error(`Function error ${r.status}`);
-    const parsed=await r.json();
-    if(parsed.error) throw new Error(parsed.error);
-    renderTrends(parsed);
-    document.getElementById('fetchTime').textContent=`Updated at ${new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}`;
+    const r = await fetch('/.netlify/functions/trends');
+    if(!r.ok) throw new Error(`Error ${r.status}`);
+    const data = await r.json();
+
+    if(data.empty){
+      out.innerHTML=`<div class="empty-state"><h3>First refresh pending</h3><p>Trends are refreshed automatically every morning at 6am. They will appear here once the first refresh has run.</p></div>`;
+      status.textContent='Not yet refreshed';
+      return;
+    }
+
+    if(data.error) throw new Error(data.error);
+
+    renderTrends(data);
+
+    if(data.refreshed_at){
+      const d = new Date(data.refreshed_at);
+      const isToday = d.toDateString() === new Date().toDateString();
+      const timeStr = d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+      const dateStr = d.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+      status.textContent = isToday ? `Refreshed today at ${timeStr}` : `Last refreshed ${dateStr} at ${timeStr}`;
+      status.className = isToday ? 'refresh-status fresh' : 'refresh-status';
+    }
+
   }catch(err){
-    out.innerHTML=`<div class="empty-state"><h3>Could not fetch</h3><p>${err.message}</p></div>`;
+    out.innerHTML=`<div class="empty-state"><h3>Could not load</h3><p>${err.message}</p></div>`;
+    status.textContent='Failed to load';
   }
-  btn.disabled=false; btn.textContent='↻  Fetch Live Trends';
 }
 
 function renderTrends(data){
@@ -906,7 +877,7 @@ function renderTrends(data){
           ${t.hooks.map(h=>`<div class="hook-line">${h}</div>`).join('')}
         </div>`).join('')}
     </div>
-    <div class="trend-note">Generated from live web search. Filter through your own voice and experience before posting.</div>`;
+    <div class="trend-note">Refreshed daily at 6am. Filter through your own voice and experience before posting.</div>`;
 }
 </script>
 </body>
