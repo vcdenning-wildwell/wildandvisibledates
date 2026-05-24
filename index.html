@@ -1,28 +1,32 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Wild and Visible — Content Intelligence</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --purple: #652781;
-    --purple-deep: #3d1650;
-    --purple-mid: #7a3295;
-    --purple-soft: #ead5f5;
-    --purple-pale: #f5eefa;
-    --green: #8ab53a;
-    --green-light: #c8daa0;
-    --green-dark: #6a8f2a;
-    --white: #FFFFFF;
-    --off-white: #faf8fc;
-    --cream: #f5f0fa;
-    --text-dark: #1a0d24;
-    --text-mid: #4a3858;
-    --text-light: #7a6888;
-    --rule: #ddd0ea;
+    /* Wild and Visible — brand-adjacent palette */
+    --violet:       #3B1F6E;
+    --violet-deep:  #1A0A2E;
+    --violet-mid:   #5A3895;
+    --violet-soft:  #E6DBF2;
+    --violet-pale:  #F5EFFB;
+    --magenta:      #D4237A;
+    --coral:        #F26419;
+    --teal:         #00B4A6;
+    --teal-light:   #B8E8E3;
+    --teal-dark:    #008C82;
+    --white:        #FFFFFF;
+    --off-white:    #FBF9FC;
+    --cream:        #FFF8F0;
+    --text-dark:    #1A0A2E;
+    --text-mid:     #4A3858;
+    --text-light:   #7A6888;
+    --rule:         #E0D5EC;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -35,7 +39,7 @@
   }
 
   .header {
-    background: var(--purple-deep);
+    background: var(--violet-deep);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -52,21 +56,44 @@
   .brand { display: flex; align-items: baseline; gap: 12px; }
 
   .brand-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 28px;
-    font-weight: 300;
-    color: var(--white);
-    letter-spacing: 0.02em;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 7px;
+    line-height: 1;
   }
 
-  .brand-name span { color: var(--green); font-style: italic; }
+  .brand-name .wv-wild {
+    font-family: 'Abril Fatface', serif;
+    font-size: 28px;
+    color: var(--white);
+    letter-spacing: -0.01em;
+  }
+
+  .brand-name .wv-and {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 18px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.08em;
+  }
+
+  .brand-name .wv-visible {
+    font-family: 'Abril Fatface', serif;
+    font-size: 28px;
+    letter-spacing: -0.01em;
+    background: linear-gradient(135deg, var(--magenta), var(--coral));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 
   .brand-sub {
     font-size: 11px;
     font-weight: 300;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.35);
+    color: rgba(255,255,255,0.4);
   }
 
   .header-date {
@@ -91,7 +118,7 @@
   }
 
   .nav-item:hover { color: rgba(255,255,255,0.75); }
-  .nav-item.active { color: var(--green-light); border-bottom-color: var(--green); }
+  .nav-item.active { color: var(--teal-light); border-bottom-color: var(--teal); }
 
   .content {
     padding: 48px 40px;
@@ -114,14 +141,14 @@
     font-weight: 500;
     letter-spacing: 0.3em;
     text-transform: uppercase;
-    color: var(--green);
+    color: var(--teal);
   }
 
   .section-title {
     font-family: 'Cormorant Garamond', serif;
     font-size: 40px;
     font-weight: 300;
-    color: var(--purple-deep);
+    color: var(--violet-deep);
     line-height: 1;
   }
 
@@ -141,7 +168,7 @@
     display: flex;
     gap: 0;
     margin-bottom: 8px;
-    border: 1.5px solid var(--purple);
+    border: 1.5px solid var(--violet);
     width: fit-content;
     overflow: hidden;
   }
@@ -154,7 +181,7 @@
     text-transform: uppercase;
     background: transparent;
     border: none;
-    border-right: 1px solid var(--purple-soft);
+    border-right: 1px solid var(--violet-soft);
     cursor: pointer;
     color: var(--text-light);
     transition: all 0.15s;
@@ -162,8 +189,8 @@
   }
 
   .f-btn:last-child { border-right: none; }
-  .f-btn:hover { background: var(--purple-pale); color: var(--purple); }
-  .f-btn.active { background: var(--purple); color: var(--white); }
+  .f-btn:hover { background: var(--violet-pale); color: var(--violet); }
+  .f-btn.active { background: var(--violet); color: var(--white); }
 
   .month-row {
     display: flex;
@@ -187,8 +214,8 @@
     font-family: 'Jost', sans-serif;
   }
 
-  .m-btn:hover { border-color: var(--purple); color: var(--purple); }
-  .m-btn.active { background: var(--green); color: var(--white); border-color: var(--green); }
+  .m-btn:hover { border-color: var(--violet); color: var(--violet); }
+  .m-btn.active { background: var(--teal); color: var(--white); border-color: var(--teal); }
 
   .search-wrap { position: relative; margin-bottom: 16px; }
 
@@ -206,7 +233,7 @@
     transition: border-color 0.2s ease;
   }
 
-  .search-field:focus { border-color: var(--purple); }
+  .search-field:focus { border-color: var(--violet); }
   .search-field::placeholder { color: var(--text-light); opacity: 0.6; }
 
   .search-icon {
@@ -223,19 +250,19 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 0;
-    border-top: 1.5px solid var(--purple);
-    border-left: 1.5px solid var(--purple);
+    border-top: 1.5px solid var(--violet);
+    border-left: 1.5px solid var(--violet);
   }
 
   .date-card {
-    border-right: 1.5px solid var(--purple);
-    border-bottom: 1.5px solid var(--purple);
+    border-right: 1.5px solid var(--violet);
+    border-bottom: 1.5px solid var(--violet);
     padding: 24px;
     background: var(--white);
     transition: background 0.15s;
   }
 
-  .date-card:hover { background: var(--purple-pale); }
+  .date-card:hover { background: var(--violet-pale); }
 
   .dc-top {
     display: flex;
@@ -248,7 +275,7 @@
     font-family: 'Cormorant Garamond', serif;
     font-size: 20px;
     font-weight: 600;
-    color: var(--purple-deep);
+    color: var(--violet-deep);
     line-height: 1.2;
     flex: 1;
     padding-right: 8px;
@@ -257,13 +284,13 @@
   .dc-date {
     font-size: 10px;
     font-weight: 500;
-    color: var(--purple);
+    color: var(--violet);
     letter-spacing: 0.1em;
-    border: 1px solid var(--purple-soft);
+    border: 1px solid var(--violet-soft);
     padding: 3px 8px;
     white-space: nowrap;
     margin-top: 2px;
-    background: var(--purple-pale);
+    background: var(--violet-pale);
   }
 
   .dc-cat {
@@ -274,8 +301,8 @@
     margin-bottom: 10px;
   }
 
-  .cat-women { color: var(--purple); }
-  .cat-business { color: var(--green-dark); }
+  .cat-women { color: var(--violet); }
+  .cat-business { color: var(--teal-dark); }
   .cat-culture { color: #7a5c2e; }
   .cat-health { color: #2a7a5c; }
   .cat-seasonal { color: var(--text-light); }
@@ -288,7 +315,7 @@
     line-height: 1.6;
     margin-bottom: 14px;
     padding-left: 12px;
-    border-left: 3px solid var(--green);
+    border-left: 3px solid var(--teal);
   }
 
   .dc-angles { border-top: 1px solid var(--rule); padding-top: 12px; }
@@ -315,7 +342,7 @@
     content: '✦';
     position: absolute;
     left: 0;
-    color: var(--green);
+    color: var(--teal);
     font-size: 8px;
     top: 6px;
   }
@@ -330,13 +357,13 @@
     font-size: 18px;
   }
 
-  .cal-wrap { border: 1.5px solid var(--purple); overflow: hidden; }
+  .cal-wrap { border: 1.5px solid var(--violet); overflow: hidden; }
 
   .cal-nav {
     display: flex;
     align-items: center;
-    background: var(--purple-deep);
-    border-bottom: 1.5px solid var(--purple);
+    background: var(--violet-deep);
+    border-bottom: 1.5px solid var(--violet);
   }
 
   .cal-nav-btn {
@@ -350,7 +377,7 @@
     font-family: 'Cormorant Garamond', serif;
   }
 
-  .cal-nav-btn:hover { background: var(--purple); color: var(--white); }
+  .cal-nav-btn:hover { background: var(--violet); color: var(--white); }
 
   .cal-title {
     flex: 1;
@@ -362,7 +389,7 @@
     letter-spacing: 0.05em;
   }
 
-  .cal-head { display: grid; grid-template-columns: repeat(7, 1fr); background: var(--purple); }
+  .cal-head { display: grid; grid-template-columns: repeat(7, 1fr); background: var(--violet); }
 
   .cal-hd {
     text-align: center;
@@ -371,7 +398,7 @@
     font-weight: 500;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--green-light);
+    color: var(--teal-light);
   }
 
   .cal-body { display: grid; grid-template-columns: repeat(7, 1fr); }
@@ -385,12 +412,12 @@
   }
 
   .cal-cell.empty { background: var(--off-white); }
-  .cal-cell.today { background: #f5f0fa; }
-  .cal-cell.has-ev { border-top: 3px solid var(--green); }
+  .cal-cell.today { background: var(--violet-pale); }
+  .cal-cell.has-ev { border-top: 3px solid var(--teal); }
   .cal-cell:nth-child(7n) { border-right: none; }
 
   .cal-day { font-size: 13px; font-weight: 400; margin-bottom: 4px; color: var(--text-mid); }
-  .cal-cell.today .cal-day { color: var(--purple); font-weight: 600; }
+  .cal-cell.today .cal-day { color: var(--violet); font-weight: 600; }
 
   .cal-ev {
     display: block;
@@ -404,8 +431,8 @@
     font-weight: 400;
   }
 
-  .ev-women { background: rgba(101,39,129,0.1); color: var(--purple); }
-  .ev-business { background: rgba(138,181,58,0.12); color: var(--green-dark); }
+  .ev-women { background: rgba(59,31,110,0.1); color: var(--violet); }
+  .ev-business { background: rgba(0,180,166,0.12); color: var(--teal-dark); }
   .ev-health { background: rgba(42,122,92,0.1); color: #2a7a5c; }
   .ev-seasonal { background: var(--cream); color: var(--text-light); border: 1px solid var(--rule); }
   .ev-culture { background: rgba(122,92,46,0.08); color: #7a5c2e; }
@@ -422,8 +449,8 @@
   .refresh-btn {
     padding: 10px 22px;
     background: transparent;
-    color: var(--purple);
-    border: 1.5px solid var(--purple);
+    color: var(--violet);
+    border: 1.5px solid var(--violet);
     font-family: 'Jost', sans-serif;
     font-size: 10px;
     font-weight: 500;
@@ -433,7 +460,7 @@
     transition: all 0.2s ease;
   }
 
-  .refresh-btn:hover { background: var(--purple); color: var(--white); }
+  .refresh-btn:hover { background: var(--violet); color: var(--white); }
 
   .refresh-status {
     font-size: 13px;
@@ -442,27 +469,27 @@
     font-family: 'Cormorant Garamond', serif;
   }
 
-  .refresh-status.fresh { color: var(--green-dark); }
+  .refresh-status.fresh { color: var(--teal-dark); }
 
   .trend-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0;
-    border-top: 1.5px solid var(--purple);
-    border-left: 1.5px solid var(--purple);
+    border-top: 1.5px solid var(--violet);
+    border-left: 1.5px solid var(--violet);
   }
 
   .trend-card {
-    border-right: 1.5px solid var(--purple);
-    border-bottom: 1.5px solid var(--purple);
+    border-right: 1.5px solid var(--violet);
+    border-bottom: 1.5px solid var(--violet);
     padding: 28px;
     background: var(--white);
     transition: background 0.15s;
   }
 
-  .trend-card:hover { background: var(--purple-pale); }
-  .trend-card.hot { background: #fdf8ec; border-top: 3px solid var(--green); }
-  .trend-card.hot:hover { background: #f9f3dc; }
+  .trend-card:hover { background: var(--violet-pale); }
+  .trend-card.hot { background: #F0FAF9; border-top: 3px solid var(--teal); }
+  .trend-card.hot:hover { background: #E3F5F2; }
 
   .t-urgency {
     font-size: 9px;
@@ -473,13 +500,13 @@
     margin-bottom: 8px;
   }
 
-  .t-urgency.now { color: var(--green-dark); }
+  .t-urgency.now { color: var(--teal-dark); }
 
   .t-topic {
     font-family: 'Cormorant Garamond', serif;
     font-size: 24px;
     font-weight: 600;
-    color: var(--purple-deep);
+    color: var(--violet-deep);
     margin-bottom: 12px;
     line-height: 1.2;
   }
@@ -491,7 +518,7 @@
     line-height: 1.65;
     color: var(--text-mid);
     padding: 12px 16px;
-    border-left: 3px solid var(--green);
+    border-left: 3px solid var(--teal);
     background: var(--cream);
     margin-bottom: 16px;
   }
@@ -521,7 +548,7 @@
     content: '→';
     position: absolute;
     left: 0;
-    color: var(--green);
+    color: var(--teal);
     font-size: 10px;
     top: 6px;
   }
@@ -539,7 +566,7 @@
     width: 32px;
     height: 32px;
     border: 2px solid var(--rule);
-    border-top-color: var(--purple);
+    border-top-color: var(--violet);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
     margin: 0 auto 20px;
@@ -557,7 +584,7 @@
     font-family: 'Cormorant Garamond', serif;
     font-size: 32px;
     font-weight: 300;
-    color: var(--purple-deep);
+    color: var(--violet-deep);
     margin-bottom: 12px;
   }
 
@@ -592,13 +619,38 @@
   }
 
   .footer-brand {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 18px;
-    font-weight: 300;
-    color: var(--text-light);
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    line-height: 1;
   }
 
-  .footer-brand span { color: var(--green); font-style: italic; }
+  .footer-brand .wv-wild {
+    font-family: 'Abril Fatface', serif;
+    font-size: 18px;
+    color: var(--text-mid);
+    letter-spacing: -0.01em;
+  }
+
+  .footer-brand .wv-and {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 13px;
+    color: var(--text-light);
+    letter-spacing: 0.08em;
+  }
+
+  .footer-brand .wv-visible {
+    font-family: 'Abril Fatface', serif;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+    background: linear-gradient(135deg, var(--magenta), var(--coral));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
   .footer-note { font-size: 11px; color: var(--text-light); font-weight: 300; letter-spacing: 0.05em; }
 
   @media (max-width: 768px) {
@@ -616,7 +668,11 @@
 <div class="header">
   <div class="header-top">
     <div class="brand">
-      <div class="brand-name">Wild and <span>Visible</span></div>
+      <div class="brand-name">
+        <span class="wv-wild">Wild</span>
+        <span class="wv-and">and</span>
+        <span class="wv-visible">Visible</span>
+      </div>
       <div class="brand-sub">Content Intelligence</div>
     </div>
     <div class="header-date" id="headerDate"></div>
@@ -712,7 +768,11 @@
 </div>
 
 <div class="footer">
-  <div class="footer-brand">Wild and <span>Visible</span> · WildWell Wellbeing</div>
+  <div class="footer-brand">
+    <span class="wv-wild">Wild</span>
+    <span class="wv-and">and</span>
+    <span class="wv-visible">Visible</span>
+  </div>
   <div class="footer-note">Content Intelligence · Members only</div>
 </div>
 
