@@ -45,18 +45,17 @@ exports.handler = async function(event, context) {
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-beta': 'web-search-2025-03-05'
+        'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-6',
         max_tokens: 2000,
         system: SYSTEM_PROMPT,
         messages: [{
           role: 'user',
           content: `Today is ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}. Search the web right now and find what is SPECIFICALLY trending today. I want real names — the actual TikTok sound everyone is using, the specific celebrity who is in the news, the exact product going viral, the real TV show everyone is talking about, the specific meme format spreading today. Search for "trending on TikTok today", "viral on Instagram today", "celebrity news today UK", "what is everyone talking about today", "trending products UK 2026", "viral TikTok sound this week". Return specific named things only — no vague themes. Return your JSON.`
         }],
-        tools: [{ type: 'web_search_20250305', name: 'web_search' }]
+        tools: [{ type: 'web_search_20260209', name: 'web_search' }]
       })
     });
 
