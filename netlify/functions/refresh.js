@@ -34,68 +34,90 @@ Return exactly 6 trends. All must be real, named, specific things happening righ
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-async function callAnthropicWithRetry(apiKey, userMessage) {
-  const waits = [5000];
-  const maxAttempts = 2;
-
-  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-    console.log(`Anthropic API attempt ${attempt} of ${maxAttempts}...`);
-
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5',
-        max_tokens: 2500,
-        system: SYSTEM_PROMPT,
-        messages: [{ role: 'user', content: userMessage }],
-        tools: [{ type: 'web_search_20250305', name: 'web_search' }]
-      })
-    });
-
-    if (response.ok) {
-      console.log(`Anthropic API succeeded on attempt ${attempt}`);
-      return response;
-    }
-
-    const errText = await response.text();
-    const status = response.status;
-    console.log(`Attempt ${attempt} failed: ${status} — ${errText.substring(0, 200)}`);
-
-    const isRetryable = status === 429 || status === 529 || (status >= 500 && status < 600);
-
-    if (!isRetryable) {
-      throw new Error(`Anthropic API error (not retryable): ${status} — ${errText}`);
-    }
-
-    if (attempt === maxAttempts) {
-      throw new Error(`Anthropic API failed after ${maxAttempts} attempts: ${status} — ${errText}`);
-    }
-
-    const waitMs = waits[attempt - 1];
-    console.log(`Waiting ${waitMs / 1000}s before retry...`);
-    await sleep(waitMs);
+async function fetchWithTimeout(url, options, timeoutMs) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await fetch(url, { ...options, signal: controller.signal });
+    clearTimeout(timeoutId);
+    return response;
+  } catch (err) {
+    clearTimeout(timeoutId);
+    if (err.name === 'AbortError') throw new Error(`Request timed out after ${timeoutMs}ms`);
+    throw err;
   }
 }
 
+async function callAnthropicWithRetry(apiKey, userMessage) {
+  const attempts = [
+    { timeout: 25000, wait: 3000 },
+    { timeout: 20000, wait: 0 }
+  ];
+  let lastError = null;
+
+  for (let i = 0; i < attempts.length; i++) {
+    const { timeout, wait } = attempts[i];
+    console.log(`Anthropic API attempt ${i + 1} of ${attempts.length} (timeout: ${timeout}ms)...`);
+
+    try {
+      const response = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01'
+        },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5',
+          max_tokens: 2500,
+          system: SYSTEM_PROMPT,
+          messages: [{ role: 'user', content: userMessage }],
+          tools: [{ type: 'web_search_20250305', name: 'web_search' }]
+        })
+      }, timeout);
+
+      if (response.ok) {
+        console.log(`Anthropic API succeeded on attempt ${i + 1}`);
+        return response;
+      }
+
+      const errText = await response.text();
+      const status = response.status;
+      console.log(`Attempt ${i + 1} failed with status ${status}: ${errText.substring(0, 300)}`);
+
+      const isRetryable = status === 429 || status === 529 || (status >= 500 && status < 600);
+      if (!isRetryable) throw new Error(`Anthropic API error (not retryable): ${status} — ${errText}`);
+      lastError = new Error(`HTTP ${status}: ${errText.substring(0, 200)}`);
+    } catch (err) {
+      console.log(`Attempt ${i + 1} threw: ${err.message}`);
+      lastError = err;
+    }
+
+    if (i < attempts.length - 1 && wait > 0) {
+      console.log(`Waiting ${wait / 1000}s before retry...`);
+      await sleep(wait);
+    }
+  }
+
+  throw lastError || new Error('All Anthropic API attempts failed');
+}
+
 exports.handler = async function(event, context) {
+  const startTime = Date.now();
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
     console.error('No Anthropic API key');
-    return { statusCode: 500, body: 'No API key' };
+    return { statusCode: 500, body: JSON.stringify({ error: 'No API key configured' }) };
   }
 
   try {
     console.log('Starting Wild and Visible trend refresh...');
-
     const today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
     const userMessage = `Today is ${today}. Search the web right now. Find what is SPECIFICALLY trending today — the actual TikTok sound everyone is using, the specific celebrity in the news, the exact product going viral, the real TV moment, the specific social media trend. Search "trending on TikTok today", "viral on Instagram today", "celebrity news today UK", "what is everyone talking about today UK", "trending wellness 2026", "viral products UK this week", "social media trends ${new Date().toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}". Return specific named things only. Return your JSON.`;
 
     const response = await callAnthropicWithRetry(apiKey, userMessage);
+    const elapsed = Math.round((Date.now() - startTime) / 1000);
+    console.log(`Anthropic call completed in ${elapsed}s`);
 
     const data = await response.json();
     const textContent = data.content
@@ -114,16 +136,16 @@ exports.handler = async function(event, context) {
 
     console.log(`Got ${parsed.trends.length} trends, saving to Supabase...`);
 
-    await fetch(`${SUPABASE_URL}/rest/v1/wildwell_trends_cache?id=gt.0`, {
+    await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/wildwell_trends_cache?id=gt.0`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         'apikey': SUPABASE_KEY,
         'Authorization': `Bearer ${SUPABASE_KEY}`
       }
-    });
+    }, 5000);
 
-    const insertRes = await fetch(`${SUPABASE_URL}/rest/v1/wildwell_trends_cache`, {
+    const insertRes = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/wildwell_trends_cache`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -135,18 +157,28 @@ exports.handler = async function(event, context) {
         trends_data: JSON.stringify(parsed),
         refreshed_at: new Date().toISOString()
       })
-    });
+    }, 5000);
 
     if (!insertRes.ok) {
       const errText = await insertRes.text();
       throw new Error(`Supabase insert failed: ${insertRes.status} — ${errText}`);
     }
 
-    console.log('Wild and Visible trends saved successfully');
-    return { statusCode: 200, body: JSON.stringify({ success: true, count: parsed.trends.length }) };
+    const totalElapsed = Math.round((Date.now() - startTime) / 1000);
+    console.log(`Trends saved successfully in ${totalElapsed}s total`);
+    return {
+      statusCode: 200,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ success: true, count: parsed.trends.length, elapsed_seconds: totalElapsed })
+    };
 
   } catch (err) {
-    console.error('Refresh error:', err.message);
-    return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
+    const elapsed = Math.round((Date.now() - startTime) / 1000);
+    console.error(`Refresh error after ${elapsed}s:`, err.message);
+    return {
+      statusCode: 500,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: err.message, elapsed_seconds: elapsed })
+    };
   }
 };
