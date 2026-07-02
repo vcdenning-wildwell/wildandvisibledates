@@ -2,6 +2,5 @@
   publish = "."
   functions = "netlify/functions"
 
-[[scheduled-functions]]
-  name = "refresh"
-  cron = "0 6 * * *"
+[functions."refresh"]
+  schedule = "0 6 * * *"
