@@ -136,7 +136,7 @@ exports.handler = async function(event, context) {
 
     console.log(`Got ${parsed.trends.length} trends, saving to Supabase...`);
 
-    await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/wildwell_trends_cache?id=gt.0`, {
+    await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/trends_cache?id=gt.0`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -145,7 +145,7 @@ exports.handler = async function(event, context) {
       }
     }, 5000);
 
-    const insertRes = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/wildwell_trends_cache`, {
+    const insertRes = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/trends_cache`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
