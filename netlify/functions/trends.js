@@ -38,11 +38,24 @@ exports.handler = async function(event, context) {
     const row = rows[0];
     const data = typeof row.trends_data === 'string' ? JSON.parse(row.trends_data) : row.trends_data;
 
+    // Normalise every trend so the page always receives the fields it renders,
+    // whichever prompt version produced the data.
+    const trends = (data.trends || []).map(t => ({
+      topic: t.topic || '',
+      category: t.category || '',
+      urgency: t.urgency || 'now',
+      biz_angle: t.biz_angle || t.business_angle || t.midlife_angle || '',
+      hooks: Array.isArray(t.hooks) && t.hooks.length
+        ? t.hooks
+        : [...(Array.isArray(t.business_hooks) ? t.business_hooks : []),
+           ...(Array.isArray(t.midlife_hooks) ? t.midlife_hooks : [])]
+    }));
+
     return {
       statusCode: 200,
       headers,
       body: JSON.stringify({
-        ...data,
+        trends,
         refreshed_at: row.refreshed_at
       })
     };
